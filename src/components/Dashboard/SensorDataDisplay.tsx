@@ -45,7 +45,7 @@ const SensorDataDisplay = () => {
           <AlertDescription>
             {sensorError instanceof Error 
               ? `${sensorError.message}` 
-              : 'Please check your connection to the backend server or verify that the server is running at http://127.0.0.1:8000'}
+              : 'Please check your connection to the backend server or verify that the server is running at http://localhost:8080'}
           </AlertDescription>
         </Alert>
       )}
@@ -57,7 +57,7 @@ const SensorDataDisplay = () => {
           <AlertDescription>
             {weatherError instanceof Error 
               ? `${weatherError.message}` 
-              : 'Please check your connection to the backend server or verify that the server is running at http://127.0.0.1:8000'}
+              : 'Please check your connection to the backend server or verify that the server is running at http://localhost:8080'}
           </AlertDescription>
         </Alert>
       )}

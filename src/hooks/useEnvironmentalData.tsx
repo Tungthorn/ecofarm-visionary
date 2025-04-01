@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { 
   SensorDataResponse, 
@@ -9,7 +8,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 
 // This URL would typically come from environment variables in a production app
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "http://localhost:8080";
 
 // Mock data for when API calls fail
 const MOCK_SENSOR_DATA: SensorDataResponse = {
