@@ -136,9 +136,10 @@ const HistoricalChart: React.FC<HistoricalChartProps> = ({ data, isLoading }) =>
           <Tooltip content={<CustomTooltip />} />
           <Legend 
             onClick={(e) => {
-              const dataKey = e.dataKey.toLowerCase();
-              if (dataKey === "temperature" || dataKey === "humidity" || dataKey === "moisture") {
-                handleLegendClick(dataKey as keyof typeof activeLines);
+              // Fix: Safely convert dataKey to string and then check if it matches our state properties
+              const dataKeyStr = String(e.dataKey).toLowerCase();
+              if (dataKeyStr === "temperature" || dataKeyStr === "humidity" || dataKeyStr === "moisture") {
+                handleLegendClick(dataKeyStr as keyof typeof activeLines);
               }
             }}
           />
