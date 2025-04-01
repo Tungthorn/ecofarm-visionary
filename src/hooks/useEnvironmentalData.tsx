@@ -7,9 +7,11 @@ import {
   DateRange
 } from "../types/types";
 
+const API_BASE_URL = "http://127.0.0.1:8000";
+
 // Function to fetch the latest sensor data
 const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
-  const response = await fetch("/data/latest/sensor");
+  const response = await fetch(`${API_BASE_URL}/data/latest/sensor`);
   if (!response.ok) {
     throw new Error("Failed to fetch latest sensor data");
   }
@@ -18,7 +20,7 @@ const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
 
 // Function to fetch the latest weather data
 const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
-  const response = await fetch("/data/latest/weather");
+  const response = await fetch(`${API_BASE_URL}/data/latest/weather`);
   if (!response.ok) {
     throw new Error("Failed to fetch latest weather data");
   }
@@ -27,7 +29,7 @@ const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
 
 // Function to fetch historical data
 const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
-  const response = await fetch("/data");
+  const response = await fetch(`${API_BASE_URL}/data`);
   if (!response.ok) {
     throw new Error("Failed to fetch historical data");
   }
