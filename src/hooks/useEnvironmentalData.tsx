@@ -8,6 +8,7 @@ import {
 } from "../types/types";
 import { toast } from "@/hooks/use-toast";
 
+// This URL would typically come from environment variables in a production app
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 // Mock data for when API calls fail
@@ -51,15 +52,25 @@ const MOCK_HISTORICAL_DATA: HistoricalDataResponse = {
 // Function to fetch the latest sensor data
 const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
   try {
+    // Display a more informative message about the server we're trying to connect to
+    console.log(`Attempting to fetch sensor data from ${API_BASE_URL}/data/latest/sensor`);
+    
     const response = await fetch(`${API_BASE_URL}/data/latest/sensor`);
     if (!response.ok) {
-      throw new Error("Failed to fetch latest sensor data");
+      throw new Error(`Server responded with status: ${response.status}`);
     }
     return response.json();
   } catch (error) {
     console.error("Sensor data fetch failed:", error);
-    // In a development environment, you might want to use mock data
+    
+    // In development environments, show a toast notification to help debugging
     if (process.env.NODE_ENV === 'development') {
+      toast({
+        title: "Using mock sensor data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+      
       console.log("Using mock sensor data");
       return MOCK_SENSOR_DATA;
     }
@@ -70,15 +81,24 @@ const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
 // Function to fetch the latest weather data
 const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
   try {
+    console.log(`Attempting to fetch weather data from ${API_BASE_URL}/data/latest/weather`);
+    
     const response = await fetch(`${API_BASE_URL}/data/latest/weather`);
     if (!response.ok) {
-      throw new Error("Failed to fetch latest weather data");
+      throw new Error(`Server responded with status: ${response.status}`);
     }
     return response.json();
   } catch (error) {
     console.error("Weather data fetch failed:", error);
-    // In a development environment, you might want to use mock data
+    
+    // In development environments, show a toast notification to help debugging
     if (process.env.NODE_ENV === 'development') {
+      toast({
+        title: "Using mock weather data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+      
       console.log("Using mock weather data");
       return MOCK_WEATHER_DATA;
     }
@@ -89,15 +109,24 @@ const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
 // Function to fetch historical data
 const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
   try {
+    console.log(`Attempting to fetch historical data from ${API_BASE_URL}/data`);
+    
     const response = await fetch(`${API_BASE_URL}/data`);
     if (!response.ok) {
-      throw new Error("Failed to fetch historical data");
+      throw new Error(`Server responded with status: ${response.status}`);
     }
     return response.json();
   } catch (error) {
     console.error("Historical data fetch failed:", error);
-    // In a development environment, you might want to use mock data
+    
+    // In development environments, show a toast notification to help debugging
     if (process.env.NODE_ENV === 'development') {
+      toast({
+        title: "Using mock historical data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+      
       console.log("Using mock historical data");
       return MOCK_HISTORICAL_DATA;
     }
