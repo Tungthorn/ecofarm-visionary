@@ -2,28 +2,36 @@
 import { useLatestSensorData, useLatestWeatherData } from "@/hooks/useEnvironmentalData";
 import EnvironmentalCard from "./EnvironmentalCard";
 import { Thermometer, CloudRain, Leaf, Calendar } from "lucide-react";
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const SensorDataDisplay = () => {
   const { 
     data: sensorData, 
     isLoading: isLoadingSensor,
-    isError: isSensorError 
+    isError: isSensorError,
+    error: sensorError
   } = useLatestSensorData();
   
   const { 
     data: weatherData, 
     isLoading: isLoadingWeather,
-    isError: isWeatherError 
+    isError: isWeatherError,
+    error: weatherError
   } = useLatestWeatherData();
 
   // Format timestamp to be more readable
   const formatTimestamp = (timestamp: string) => {
     try {
-      return format(new Date(timestamp), "MMM d, yyyy • h:mm a");
+      const date = parseISO(timestamp);
+      if (!isValid(date)) {
+        return "Invalid date";
+      }
+      return format(date, "MMM d, yyyy • h:mm a");
     } catch (e) {
       console.error("Error formatting date:", e);
-      return timestamp;
+      return "Date unavailable";
     }
   };
 
@@ -66,14 +74,26 @@ const SensorDataDisplay = () => {
       />
       
       {isSensorError && (
-        <div className="col-span-full p-4 bg-red-100 text-red-800 rounded-md">
-          Error loading sensor data. Please try again later.
+        <div className="col-span-full">
+          <Alert variant="destructive">
+            <AlertTitle>Error loading sensor data</AlertTitle>
+            <AlertDescription>
+              Please check your connection to the backend server.
+              {sensorError instanceof Error ? ` ${sensorError.message}` : ''}
+            </AlertDescription>
+          </Alert>
         </div>
       )}
       
-      {isWeatherError && (
-        <div className="col-span-full p-4 bg-red-100 text-red-800 rounded-md">
-          Error loading weather data. Please try again later.
+      {isWeatherError && !isSensorError && (
+        <div className="col-span-full">
+          <Alert variant="destructive">
+            <AlertTitle>Error loading weather data</AlertTitle>
+            <AlertDescription>
+              Please check your connection to the backend server.
+              {weatherError instanceof Error ? ` ${weatherError.message}` : ''}
+            </AlertDescription>
+          </Alert>
         </div>
       )}
     </div>
