@@ -112,8 +112,10 @@ export const useLatestSensorData = () => {
     queryFn: fetchLatestSensorData,
     refetchInterval: 60000, // Refetch every minute
     retry: 2,
-    onError: (error) => {
-      console.error("Failed to fetch sensor data:", error);
+    meta: {
+      onError: (error: Error) => {
+        console.error("Failed to fetch sensor data:", error);
+      }
     }
   });
 };
@@ -125,8 +127,10 @@ export const useLatestWeatherData = () => {
     queryFn: fetchLatestWeatherData,
     refetchInterval: 300000, // Refetch every 5 minutes
     retry: 2,
-    onError: (error) => {
-      console.error("Failed to fetch weather data:", error);
+    meta: {
+      onError: (error: Error) => {
+        console.error("Failed to fetch weather data:", error);
+      }
     }
   });
 };
@@ -138,8 +142,10 @@ export const useHistoricalData = () => {
     queryFn: fetchHistoricalData,
     refetchInterval: 3600000, // Refetch every hour
     retry: 2,
-    onError: (error) => {
-      console.error("Failed to fetch historical data:", error);
+    meta: {
+      onError: (error: Error) => {
+        console.error("Failed to fetch historical data:", error);
+      }
     }
   });
 };
