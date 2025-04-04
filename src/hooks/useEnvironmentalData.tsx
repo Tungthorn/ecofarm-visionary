@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { 
   SensorDataResponse, 
@@ -9,11 +8,12 @@ import {
 import { toast } from "@/hooks/use-toast";
 
 // This URL would typically come from environment variables in a production app
-// In a deployed environment, we'll always use mock data since localhost won't be accessible
-const isDevelopmentServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE_URL = "http://localhost:8080";
 
-// Define the API_BASE_URL - only use the real endpoint in local development
-const API_BASE_URL = isDevelopmentServer ? "http://localhost:8080" : null;
+// Define environment detection
+const isDevelopmentEnvironment = (): boolean => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+};
 
 // Mock data for when API calls fail or when in production environment
 const MOCK_SENSOR_DATA: SensorDataResponse = {
@@ -55,8 +55,8 @@ const MOCK_HISTORICAL_DATA: HistoricalDataResponse = {
 
 // Function to fetch the latest sensor data
 const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
-  // Always use mock data in production since we can't connect to localhost
-  if (!API_BASE_URL || !isDevelopmentServer) {
+  // Use mock data in production environments
+  if (!isDevelopmentEnvironment()) {
     console.log("Using mock sensor data in production environment");
     return MOCK_SENSOR_DATA;
   }
@@ -64,15 +64,7 @@ const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
   try {
     console.log(`Attempting to fetch sensor data from ${API_BASE_URL}/data/latest/sensor`);
     
-    const response = await fetch(`${API_BASE_URL}/data/latest/sensor`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode: 'cors',
-      credentials: 'omit'
-    });
+    const response = await fetch(`${API_BASE_URL}/data/latest/sensor`);
     
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
@@ -84,12 +76,14 @@ const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
   } catch (error) {
     console.error("Sensor data fetch failed:", error);
     
-    // In development environments, show a toast notification to help debugging
-    toast({
-      title: "Using mock sensor data",
-      description: "Could not connect to backend server. Using demo data for development.",
-      variant: "default"
-    });
+    // Only show toast in development environment
+    if (isDevelopmentEnvironment()) {
+      toast({
+        title: "Using mock sensor data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+    }
     
     console.log("Using mock sensor data");
     return MOCK_SENSOR_DATA;
@@ -98,8 +92,8 @@ const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
 
 // Function to fetch the latest weather data
 const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
-  // Always use mock data in production since we can't connect to localhost
-  if (!API_BASE_URL || !isDevelopmentServer) {
+  // Use mock data in production environments
+  if (!isDevelopmentEnvironment()) {
     console.log("Using mock weather data in production environment");
     return MOCK_WEATHER_DATA;
   }
@@ -107,15 +101,7 @@ const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
   try {
     console.log(`Attempting to fetch weather data from ${API_BASE_URL}/data/latest/weather`);
     
-    const response = await fetch(`${API_BASE_URL}/data/latest/weather`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode: 'cors',
-      credentials: 'omit'
-    });
+    const response = await fetch(`${API_BASE_URL}/data/latest/weather`);
     
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
@@ -127,12 +113,14 @@ const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
   } catch (error) {
     console.error("Weather data fetch failed:", error);
     
-    // In development environments, show a toast notification to help debugging
-    toast({
-      title: "Using mock weather data",
-      description: "Could not connect to backend server. Using demo data for development.",
-      variant: "default"
-    });
+    // Only show toast in development environment
+    if (isDevelopmentEnvironment()) {
+      toast({
+        title: "Using mock weather data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+    }
     
     console.log("Using mock weather data");
     return MOCK_WEATHER_DATA;
@@ -141,8 +129,8 @@ const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
 
 // Function to fetch historical data
 const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
-  // Always use mock data in production since we can't connect to localhost
-  if (!API_BASE_URL || !isDevelopmentServer) {
+  // Use mock data in production environments
+  if (!isDevelopmentEnvironment()) {
     console.log("Using mock historical data in production environment");
     return MOCK_HISTORICAL_DATA;
   }
@@ -150,15 +138,7 @@ const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
   try {
     console.log(`Attempting to fetch historical data from ${API_BASE_URL}/data`);
     
-    const response = await fetch(`${API_BASE_URL}/data`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode: 'cors',
-      credentials: 'omit'
-    });
+    const response = await fetch(`${API_BASE_URL}/data`);
     
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
@@ -170,12 +150,14 @@ const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
   } catch (error) {
     console.error("Historical data fetch failed:", error);
     
-    // In development environments, show a toast notification to help debugging
-    toast({
-      title: "Using mock historical data",
-      description: "Could not connect to backend server. Using demo data for development.",
-      variant: "default"
-    });
+    // Only show toast in development environment
+    if (isDevelopmentEnvironment()) {
+      toast({
+        title: "Using mock historical data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+    }
     
     console.log("Using mock historical data");
     return MOCK_HISTORICAL_DATA;

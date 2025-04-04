@@ -23,6 +23,8 @@ const SensorDataDisplay = () => {
 
   // Format timestamp to be more readable
   const formatTimestamp = (timestamp: string) => {
+    if (!timestamp) return "Date unavailable";
+    
     try {
       // Handle both ISO format and database format (YYYY-MM-DD HH:MM:SS)
       const date = timestamp.includes('T') 
@@ -41,6 +43,9 @@ const SensorDataDisplay = () => {
 
   // Check if we're in a deployed environment where localhost connections aren't possible
   const isDeployedEnvironment = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+
+  // Debug log to check the received data
+  console.log("Current sensor data received:", sensorData);
 
   return (
     <div className="space-y-4">
