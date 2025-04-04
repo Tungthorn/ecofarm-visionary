@@ -39,10 +39,13 @@ const SensorDataDisplay = () => {
     }
   };
 
+  // Check if we're in a deployed environment where localhost connections aren't possible
+  const isDeployedEnvironment = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+
   return (
     <div className="space-y-4">
-      {/* Error alerts - displayed only when there are errors */}
-      {isSensorError && (
+      {/* Error alerts - displayed only when there are errors and not in deployed environment */}
+      {isSensorError && !isDeployedEnvironment && (
         <Alert variant="destructive" className="animate-in fade-in-50">
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Error loading sensor data</AlertTitle>
@@ -54,7 +57,7 @@ const SensorDataDisplay = () => {
         </Alert>
       )}
       
-      {isWeatherError && !isSensorError && (
+      {isWeatherError && !isSensorError && !isDeployedEnvironment && (
         <Alert variant="destructive" className="animate-in fade-in-50">
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Error loading weather data</AlertTitle>
@@ -62,6 +65,18 @@ const SensorDataDisplay = () => {
             {weatherError instanceof Error 
               ? `${weatherError.message}` 
               : 'Please check your connection to the backend server or verify that the server is running at http://localhost:8080'}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Environment notice for deployed environments */}
+      {isDeployedEnvironment && (
+        <Alert variant="default" className="animate-in fade-in-50 bg-amber-50 border-amber-200">
+          <AlertTriangle className="h-4 w-4 text-amber-500" />
+          <AlertTitle>Demo Mode Active</AlertTitle>
+          <AlertDescription>
+            You're viewing demo data because this app is running in a deployed environment and cannot connect to http://localhost:8080. 
+            To see real data, run this application locally on the same machine as your backend server.
           </AlertDescription>
         </Alert>
       )}
