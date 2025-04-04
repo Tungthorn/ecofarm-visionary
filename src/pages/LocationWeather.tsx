@@ -1,10 +1,10 @@
 
 import { useState } from "react";
 import LocationSelector from "@/components/LocationSelector/LocationSelector";
-import LocationWeather from "@/components/LocationSelector/LocationWeather";
+import WeatherDisplay from "@/components/LocationSelector/LocationWeather";
 import { Compass } from "lucide-react";
 
-const LocationWeather = () => {
+const LocationWeatherPage = () => {
   const [coordinates, setCoordinates] = useState<{ lat: string; lon: string } | null>(null);
 
   const handleLocationSelected = (lat: string, lon: string) => {
@@ -31,7 +31,7 @@ const LocationWeather = () => {
         {coordinates && (
           <section className="space-y-4">
             <h2 className="text-xl font-semibold">Weather Results</h2>
-            <LocationWeather latitude={coordinates.lat} longitude={coordinates.lon} />
+            <WeatherDisplay latitude={coordinates.lat} longitude={coordinates.lon} />
           </section>
         )}
       </div>
@@ -39,4 +39,4 @@ const LocationWeather = () => {
   );
 };
 
-export default LocationWeather;
+export default LocationWeatherPage;
