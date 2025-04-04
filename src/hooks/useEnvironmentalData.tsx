@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { 
   SensorDataResponse, 
@@ -54,11 +55,23 @@ const fetchLatestSensorData = async (): Promise<SensorDataResponse> => {
     // Display a more informative message about the server we're trying to connect to
     console.log(`Attempting to fetch sensor data from ${API_BASE_URL}/data/latest/sensor`);
     
-    const response = await fetch(`${API_BASE_URL}/data/latest/sensor`);
+    const response = await fetch(`${API_BASE_URL}/data/latest/sensor`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      credentials: 'omit'
+    });
+    
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
-    return response.json();
+    
+    const data = await response.json();
+    console.log("Received sensor data:", data);
+    return data;
   } catch (error) {
     console.error("Sensor data fetch failed:", error);
     
@@ -82,11 +95,23 @@ const fetchLatestWeatherData = async (): Promise<WeatherDataResponse> => {
   try {
     console.log(`Attempting to fetch weather data from ${API_BASE_URL}/data/latest/weather`);
     
-    const response = await fetch(`${API_BASE_URL}/data/latest/weather`);
+    const response = await fetch(`${API_BASE_URL}/data/latest/weather`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      credentials: 'omit'
+    });
+    
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
-    return response.json();
+    
+    const data = await response.json();
+    console.log("Received weather data:", data);
+    return data;
   } catch (error) {
     console.error("Weather data fetch failed:", error);
     
@@ -110,11 +135,23 @@ const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
   try {
     console.log(`Attempting to fetch historical data from ${API_BASE_URL}/data`);
     
-    const response = await fetch(`${API_BASE_URL}/data`);
+    const response = await fetch(`${API_BASE_URL}/data`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      credentials: 'omit'
+    });
+    
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
-    return response.json();
+    
+    const data = await response.json();
+    console.log("Received historical data:", data);
+    return data;
   } catch (error) {
     console.error("Historical data fetch failed:", error);
     
@@ -139,7 +176,8 @@ export const useLatestSensorData = () => {
     queryKey: ["latestSensorData"],
     queryFn: fetchLatestSensorData,
     refetchInterval: 60000, // Refetch every minute
-    retry: 2,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
       onError: (error: Error) => {
         console.error("Failed to fetch sensor data:", error);
@@ -154,7 +192,8 @@ export const useLatestWeatherData = () => {
     queryKey: ["latestWeatherData"],
     queryFn: fetchLatestWeatherData,
     refetchInterval: 300000, // Refetch every 5 minutes
-    retry: 2,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
       onError: (error: Error) => {
         console.error("Failed to fetch weather data:", error);
@@ -169,7 +208,8 @@ export const useHistoricalData = () => {
     queryKey: ["historicalData"],
     queryFn: fetchHistoricalData,
     refetchInterval: 3600000, // Refetch every hour
-    retry: 2,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
       onError: (error: Error) => {
         console.error("Failed to fetch historical data:", error);

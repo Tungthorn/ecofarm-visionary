@@ -24,13 +24,17 @@ const SensorDataDisplay = () => {
   // Format timestamp to be more readable
   const formatTimestamp = (timestamp: string) => {
     try {
-      const date = parseISO(timestamp);
+      // Handle both ISO format and database format (YYYY-MM-DD HH:MM:SS)
+      const date = timestamp.includes('T') 
+        ? parseISO(timestamp)
+        : new Date(timestamp.replace(' ', 'T'));
+
       if (!isValid(date)) {
         return "Invalid date";
       }
       return format(date, "MMM d, yyyy • h:mm a");
     } catch (e) {
-      console.error("Error formatting date:", e);
+      console.error("Error formatting date:", e, "Original timestamp:", timestamp);
       return "Date unavailable";
     }
   };

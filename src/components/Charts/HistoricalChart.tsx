@@ -31,9 +31,12 @@ const HistoricalChart: React.FC<HistoricalChartProps> = ({ data, isLoading }) =>
     // Parse the timestamp to a date object
     let date;
     try {
-      date = parseISO(item.timestamp);
+      // Handle both ISO format and database format (YYYY-MM-DD HH:MM:SS)
+      date = item.timestamp.includes('T') 
+        ? parseISO(item.timestamp)
+        : new Date(item.timestamp.replace(' ', 'T'));
     } catch (e) {
-      console.error("Error parsing date:", e);
+      console.error("Error parsing date:", e, "Original timestamp:", item.timestamp);
       date = new Date();
     }
     
