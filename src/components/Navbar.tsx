@@ -1,74 +1,82 @@
 
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, ChartLine, Leaf } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Leaf, BarChart2, Home, Menu, SproutIcon, Compass } from "lucide-react";
+import { useMobile } from "@/hooks/use-mobile";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
   const location = useLocation();
-  
-  // Navigation items with their paths and icons
-  const navItems = [
-    { 
-      name: "Dashboard", 
-      path: "/", 
-      icon: <Home className="w-5 h-5" /> 
-    },
-    { 
-      name: "Historical Data", 
-      path: "/historical", 
-      icon: <ChartLine className="w-5 h-5" /> 
-    },
-    { 
-      name: "Crop Recommendations", 
-      path: "/recommendations", 
-      icon: <Leaf className="w-5 h-5" /> 
-    },
+  const isMobile = useMobile();
+
+  const closeMenu = () => setOpen(false);
+
+  const links = [
+    { path: "/", label: "Dashboard", icon: <Home className="h-4 w-4" /> },
+    { path: "/historical", label: "Historical Data", icon: <BarChart2 className="h-4 w-4" /> },
+    { path: "/recommendations", label: "Crop Recommendations", icon: <SproutIcon className="h-4 w-4" /> },
+    { path: "/location", label: "Location Weather", icon: <Compass className="h-4 w-4" /> },
   ];
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-background border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-xl font-bold text-ecofarm-green-dark">EcoFarm</h1>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {navItems.map((item) => (
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <Leaf className="h-8 w-8 text-primary" />
+              <span className="ml-2 text-xl font-bold">EcoFarm Monitor</span>
+            </Link>
+          </div>
+
+          {isMobile ? (
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[250px] sm:w-[300px]">
+                <div className="flex flex-col py-6">
+                  {links.map((link) => (
+                    <Link 
+                      key={link.path} 
+                      to={link.path}
+                      onClick={closeMenu}
+                      className={`px-4 py-2 mb-1 rounded-md text-sm flex items-center ${
+                        location.pathname === link.path
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-foreground/70 hover:text-foreground hover:bg-accent"
+                      }`}
+                    >
+                      {link.icon}
+                      <span className="ml-2">{link.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+          ) : (
+            <div className="hidden md:flex items-center space-x-1">
+              {links.map((link) => (
                 <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`${
-                    location.pathname === item.path
-                      ? "border-ecofarm-green-dark text-ecofarm-green-dark"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  key={link.path}
+                  to={link.path}
+                  className={`px-3 py-2 rounded-md text-sm flex items-center ${
+                    location.pathname === link.path
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground/70 hover:text-foreground hover:bg-accent"
+                  }`}
                 >
-                  <span className="mr-2">{item.icon}</span>
-                  {item.name}
+                  {link.icon}
+                  <span className="ml-2">{link.label}</span>
                 </Link>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile bottom navigation */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white shadow-md border-t border-gray-200 z-10">
-        <div className="flex justify-around">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`${
-                location.pathname === item.path
-                  ? "text-ecofarm-green-dark"
-                  : "text-gray-500"
-              } flex flex-col items-center py-2 px-3`}
-            >
-              <span className="inline-block">{item.icon}</span>
-              <span className="text-xs mt-1">{item.name}</span>
-            </Link>
-          ))}
+          )}
         </div>
       </div>
     </nav>

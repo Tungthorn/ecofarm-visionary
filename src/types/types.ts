@@ -36,6 +36,28 @@ export interface WeatherDataResponse {
   data: WeatherData;
 }
 
+// User location weather data
+export interface UserLocationWeatherResponse {
+  coord: {
+    lon: number;
+    lat: number;
+  };
+  weather: Array<{
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+}
+
 // Crop recommendation types
 export interface Crop {
   name: string;

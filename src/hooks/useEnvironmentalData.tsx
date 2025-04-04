@@ -3,7 +3,8 @@ import {
   SensorDataResponse, 
   HistoricalDataResponse, 
   WeatherDataResponse,
-  DateRange
+  DateRange,
+  UserLocationWeatherResponse
 } from "../types/types";
 import { toast } from "@/hooks/use-toast";
 
@@ -164,6 +165,51 @@ const fetchHistoricalData = async (): Promise<HistoricalDataResponse> => {
   }
 };
 
+// Function to fetch user location weather data
+const fetchUserLocationWeather = async (lat: string, lon: string): Promise<UserLocationWeatherResponse> => {
+  // Use mock data in production environments
+  if (!isDevelopmentEnvironment()) {
+    console.log("Using mock weather data in production environment");
+    return {
+      coord: { lon: parseFloat(lon), lat: parseFloat(lat) },
+      weather: [{ id: 800, main: "Clear", description: "clear sky", icon: "01d" }],
+      main: { temp: 25, feels_like: 25, temp_min: 23, temp_max: 27, pressure: 1015, humidity: 60 }
+    };
+  }
+
+  try {
+    console.log(`Attempting to fetch user location weather data from ${API_BASE_URL}/data/weather?lat=${lat}&lon=${lon}`);
+    
+    const response = await fetch(`${API_BASE_URL}/data/weather?lat=${lat}&lon=${lon}`);
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log("Received user location weather data:", data);
+    return data;
+  } catch (error) {
+    console.error("User location weather data fetch failed:", error);
+    
+    // Only show toast in development environment
+    if (isDevelopmentEnvironment()) {
+      toast({
+        title: "Using mock location weather data",
+        description: "Could not connect to backend server. Using demo data for development.",
+        variant: "default"
+      });
+    }
+    
+    console.log("Using mock location weather data");
+    return {
+      coord: { lon: parseFloat(lon), lat: parseFloat(lat) },
+      weather: [{ id: 800, main: "Clear", description: "clear sky", icon: "01d" }],
+      main: { temp: 25, feels_like: 25, temp_min: 23, temp_max: 27, pressure: 1015, humidity: 60 }
+    };
+  }
+};
+
 // Hook for fetching latest sensor data
 export const useLatestSensorData = () => {
   return useQuery({
@@ -207,6 +253,23 @@ export const useHistoricalData = () => {
     meta: {
       onError: (error: Error) => {
         console.error("Failed to fetch historical data:", error);
+      }
+    }
+  });
+};
+
+// Hook for fetching user location weather data
+export const useUserLocationWeather = (lat: string, lon: string) => {
+  return useQuery({
+    queryKey: ["userLocationWeather", lat, lon],
+    queryFn: () => fetchUserLocationWeather(lat, lon),
+    enabled: !!lat && !!lon, // Only run query when lat and lon are provided
+    refetchInterval: 300000, // Refetch every 5 minutes
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    meta: {
+      onError: (error: Error) => {
+        console.error("Failed to fetch user location weather data:", error);
       }
     }
   });

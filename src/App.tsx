@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
 import HistoricalData from "./pages/HistoricalData";
 import CropRecommendations from "./pages/CropRecommendations";
+import LocationWeather from "./pages/LocationWeather";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/historical" element={<HistoricalData />} />
               <Route path="/recommendations" element={<CropRecommendations />} />
+              <Route path="/location" element={<LocationWeather />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
