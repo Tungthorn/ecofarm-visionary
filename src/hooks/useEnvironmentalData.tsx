@@ -188,6 +188,12 @@ const fetchUserLocationWeather = async (lat: string, lon: string): Promise<UserL
     
     const data = await response.json();
     console.log("Received user location weather data:", data);
+    
+    // Ensure weather property is an array, even if empty
+    if (data && data.weather === null) {
+      data.weather = [];
+    }
+    
     return data;
   } catch (error) {
     console.error("User location weather data fetch failed:", error);

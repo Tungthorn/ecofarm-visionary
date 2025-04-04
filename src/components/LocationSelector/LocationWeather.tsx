@@ -53,11 +53,11 @@ const LocationWeather = ({ latitude, longitude }: LocationWeatherProps) => {
     );
   }
 
-  if (!weatherData) {
+  if (!weatherData || !weatherData.weather) {
     return (
       <Alert>
         <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>No data available</AlertTitle>
+        <AlertTitle>No weather data available</AlertTitle>
         <AlertDescription>
           Weather data for this location is not available
         </AlertDescription>
@@ -65,9 +65,13 @@ const LocationWeather = ({ latitude, longitude }: LocationWeatherProps) => {
     );
   }
 
-  // Get the weather description and icon
-  const weatherDescription = weatherData.weather[0]?.description || "Unknown weather";
-  const weatherMain = weatherData.weather[0]?.main || "Unknown";
+  // Get the weather description and icon - add null checks
+  const weatherDescription = weatherData.weather && weatherData.weather[0] 
+    ? weatherData.weather[0].description 
+    : "Unknown weather";
+  const weatherMain = weatherData.weather && weatherData.weather[0] 
+    ? weatherData.weather[0].main 
+    : "Unknown";
 
   return (
     <Card>
