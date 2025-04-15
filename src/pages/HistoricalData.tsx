@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,8 @@ const HistoricalData = () => {
     endDate: today,
   });
   
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  // State to track the calendar selection phase
+  const [selectionState, setSelectionState] = useState<'start' | 'end'>('start');
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Filter data by selected date range
@@ -42,32 +44,33 @@ const HistoricalData = () => {
     });
   };
 
-  // Handler for calendar date selection
+  // Improved handler for calendar date selection
   const handleCalendarSelect = (date: Date | undefined) => {
-    if (date) {
-      setSelectedDate(date);
-      // If we already have a start date but no end date, set the end date
-      if (dateRange.startDate && !dateRange.endDate) {
-        // Ensure end date is after start date
-        if (date < dateRange.startDate) {
-          setDateRange({
-            startDate: date,
-            endDate: dateRange.startDate,
-          });
-        } else {
-          setDateRange({
-            ...dateRange,
-            endDate: date,
-          });
-        }
-        setCalendarOpen(false);
-      } else {
-        // Otherwise, set just the start date and clear the end date
+    if (!date) return;
+    
+    if (selectionState === 'start') {
+      // First selection sets the start date
+      setDateRange({
+        startDate: date,
+        endDate: addDays(date, 7), // Default to 7 days from selected date
+      });
+      setSelectionState('end');
+    } else {
+      // Second selection sets the end date
+      // Ensure end date is after start date
+      if (date < dateRange.startDate) {
         setDateRange({
           startDate: date,
-          endDate: addDays(date, 7), // Default to 7 days from selected date
+          endDate: dateRange.startDate,
+        });
+      } else {
+        setDateRange({
+          ...dateRange,
+          endDate: date,
         });
       }
+      setSelectionState('start');
+      setCalendarOpen(false);
     }
   };
 
@@ -137,12 +140,20 @@ const HistoricalData = () => {
                         )}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 bg-white" align="start">
+                      <div className="p-2 text-center border-b">
+                        <p className="text-sm font-medium">
+                          {selectionState === 'start' 
+                            ? 'Select start date' 
+                            : 'Select end date'}
+                        </p>
+                      </div>
                       <Calendar
                         mode="single"
-                        selected={selectedDate}
+                        selected={selectionState === 'start' ? dateRange.startDate : dateRange.endDate}
                         onSelect={handleCalendarSelect}
                         initialFocus
+                        className="pointer-events-auto"
                       />
                     </PopoverContent>
                   </Popover>
