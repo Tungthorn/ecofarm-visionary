@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +9,7 @@ import HistoricalData from "./pages/HistoricalData";
 import CropRecommendations from "./pages/CropRecommendations";
 import LocationWeatherPage from "./pages/LocationWeather";
 import NotFound from "./pages/NotFound";
+import Predictions from "./pages/Predictions";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +34,7 @@ const App = () => (
               <Route path="/historical" element={<HistoricalData />} />
               <Route path="/recommendations" element={<CropRecommendations />} />
               <Route path="/location" element={<LocationWeatherPage />} />
+              <Route path="/predictions" element={<Predictions />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
