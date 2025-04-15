@@ -18,7 +18,7 @@ export const useMoisturePrediction = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          temperature: data.temperature,
+          temparature: data.temparature,
           humidity: data.humidity,
         }),
       });
@@ -49,7 +49,7 @@ export const useCropPrediction = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          temperature: data.temperature,
+          temparature: data.temparature,
           humidity: data.humidity,
           moisture: data.moisture,
         }),

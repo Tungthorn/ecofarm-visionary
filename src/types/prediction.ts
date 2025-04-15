@@ -1,11 +1,11 @@
 
 export interface PredictMoistRequest {
-  temperature: number;
+  temparature: number;
   humidity: number;
 }
 
 export interface PredictCropRequest {
-  temperature: number;
+  temparature: number;
   humidity: number;
   moisture: number;
 }

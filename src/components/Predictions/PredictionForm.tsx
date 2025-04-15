@@ -8,7 +8,7 @@ import { useMoisturePrediction, useCropPrediction } from "@/hooks/usePredictions
 import { Droplets, Leaf } from "lucide-react";
 
 export const PredictionForm = () => {
-  const [temperature, setTemperature] = useState("");
+  const [temparature, setTemparature] = useState("");
   const [humidity, setHumidity] = useState("");
   const [moisture, setMoisture] = useState("");
   
@@ -17,20 +17,20 @@ export const PredictionForm = () => {
 
   const handleMoisturePrediction = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!temperature || !humidity) return;
+    if (!temparature || !humidity) return;
     
     moistureMutation.mutate({
-      temperature: Number(temperature),
+      temparature: Number(temparature),
       humidity: Number(humidity),
     });
   };
 
   const handleCropPrediction = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!temperature || !humidity || !moisture) return;
+    if (!temparature || !humidity || !moisture) return;
     
     cropMutation.mutate({
-      temperature: Number(temperature),
+      temparature: Number(temparature),
       humidity: Number(humidity),
       moisture: Number(moisture),
     });
@@ -45,19 +45,19 @@ export const PredictionForm = () => {
             Moisture Prediction
           </CardTitle>
           <CardDescription>
-            Predict soil moisture based on temperature and humidity
+            Predict soil moisture based on temparature and humidity
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleMoisturePrediction} className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="temperature">Temperature (°C)</Label>
+              <Label htmlFor="temparature">Temparature (°C)</Label>
               <Input
-                id="temperature"
+                id="temparature"
                 type="number"
-                value={temperature}
-                onChange={(e) => setTemperature(e.target.value)}
-                placeholder="Enter temperature"
+                value={temparature}
+                onChange={(e) => setTemparature(e.target.value)}
+                placeholder="Enter temparature"
                 required
               />
             </div>
@@ -98,13 +98,13 @@ export const PredictionForm = () => {
         <CardContent>
           <form onSubmit={handleCropPrediction} className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="crop-temperature">Temperature (°C)</Label>
+              <Label htmlFor="crop-temparature">Temparature (°C)</Label>
               <Input
-                id="crop-temperature"
+                id="crop-temparature"
                 type="number"
-                value={temperature}
-                onChange={(e) => setTemperature(e.target.value)}
-                placeholder="Enter temperature"
+                value={temparature}
+                onChange={(e) => setTemparature(e.target.value)}
+                placeholder="Enter temparature"
                 required
               />
             </div>
