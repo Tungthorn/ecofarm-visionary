@@ -11,5 +11,5 @@ export interface PredictCropRequest {
 }
 
 export interface PredictionResponse {
-  prediction: number | string;
+  prediction: string | number;
 }

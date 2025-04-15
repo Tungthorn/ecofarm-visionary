@@ -1,13 +1,17 @@
 
 import { useMutation } from "@tanstack/react-query";
-import { PredictMoistRequest, PredictCropRequest, PredictionResponse } from "@/types/prediction";
-import { toast } from "@/hooks/use-toast";
+import { 
+  PredictMoistRequest, 
+  PredictCropRequest, 
+  PredictionResponse 
+} from "@/types/prediction";
+import { toast } from "@/components/ui/use-toast";
 
 const API_BASE_URL = "http://localhost:8080";
 
 export const useMoisturePrediction = () => {
-  return useMutation({
-    mutationFn: async (data: PredictMoistRequest): Promise<PredictionResponse> => {
+  return useMutation<PredictionResponse, Error, PredictMoistRequest>({
+    mutationFn: async (data) => {
       const response = await fetch(`${API_BASE_URL}/data/predict-moisture`, {
         method: 'POST',
         headers: {
@@ -20,14 +24,15 @@ export const useMoisturePrediction = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to predict moisture');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to predict moisture');
       }
 
       return response.json();
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast({
-        title: "Error",
+        title: "Prediction Error",
         description: error.message,
         variant: "destructive",
       });
@@ -36,8 +41,8 @@ export const useMoisturePrediction = () => {
 };
 
 export const useCropPrediction = () => {
-  return useMutation({
-    mutationFn: async (data: PredictCropRequest): Promise<PredictionResponse> => {
+  return useMutation<PredictionResponse, Error, PredictCropRequest>({
+    mutationFn: async (data) => {
       const response = await fetch(`${API_BASE_URL}/data/predict-crop`, {
         method: 'POST',
         headers: {
@@ -51,14 +56,15 @@ export const useCropPrediction = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to predict crop');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to predict crop');
       }
 
       return response.json();
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast({
-        title: "Error",
+        title: "Prediction Error",
         description: error.message,
         variant: "destructive",
       });
