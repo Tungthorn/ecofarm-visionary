@@ -11,5 +11,6 @@ export interface PredictCropRequest {
 }
 
 export interface PredictionResponse {
-  prediction: string | number;
+  predict_crop?: string;
+  predict_moist?: number;
 }

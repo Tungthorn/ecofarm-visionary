@@ -75,10 +75,10 @@ export const PredictionForm = () => {
             <Button type="submit" disabled={moistureMutation.isPending}>
               Predict Moisture
             </Button>
-            {moistureMutation.data && (
+            {moistureMutation.data && moistureMutation.data.predict_moist !== undefined && (
               <div className="mt-4 p-4 bg-muted rounded-md">
                 <p className="font-medium">Predicted Moisture:</p>
-                <p className="text-2xl">{moistureMutation.data.prediction}%</p>
+                <p className="text-2xl">{moistureMutation.data.predict_moist.toFixed(2)}%</p>
               </div>
             )}
           </form>
@@ -133,10 +133,10 @@ export const PredictionForm = () => {
             <Button type="submit" disabled={cropMutation.isPending}>
               Predict Crop
             </Button>
-            {cropMutation.data && (
+            {cropMutation.data && cropMutation.data.predict_crop && (
               <div className="mt-4 p-4 bg-muted rounded-md">
                 <p className="font-medium">Recommended Crop:</p>
-                <p className="text-2xl capitalize">{cropMutation.data.prediction}</p>
+                <p className="text-2xl capitalize">{cropMutation.data.predict_crop}</p>
               </div>
             )}
           </form>
