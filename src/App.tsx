@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
 import HistoricalData from "./pages/HistoricalData";
-import CropRecommendations from "./pages/CropRecommendations";
 import LocationWeatherPage from "./pages/LocationWeather";
 import NotFound from "./pages/NotFound";
 import Predictions from "./pages/Predictions";
@@ -32,7 +31,6 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/historical" element={<HistoricalData />} />
-              <Route path="/recommendations" element={<CropRecommendations />} />
               <Route path="/location" element={<LocationWeatherPage />} />
               <Route path="/predictions" element={<Predictions />} />
               <Route path="*" element={<NotFound />} />
