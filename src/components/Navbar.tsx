@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Leaf, BarChart2, Home, Menu, SproutIcon, Compass } from "lucide-react";
+import { Leaf, BarChart2, Home, Menu, SproutIcon, Compass, Wand2 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Navbar = () => {
@@ -18,6 +18,7 @@ const Navbar = () => {
     { path: "/historical", label: "Historical Data", icon: <BarChart2 className="h-4 w-4" /> },
     { path: "/recommendations", label: "Crop Recommendations", icon: <SproutIcon className="h-4 w-4" /> },
     { path: "/location", label: "Location Weather", icon: <Compass className="h-4 w-4" /> },
+    { path: "/predictions", label: "Predictions", icon: <Wand2 className="h-4 w-4" /> },
   ];
 
   return (
