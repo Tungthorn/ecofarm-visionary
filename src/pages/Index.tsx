@@ -5,14 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useHistoricalData, useLatestSensorData, calculateAverages } from "@/hooks/useEnvironmentalData";
 import HistoricalChart from "@/components/Charts/HistoricalChart";
 import { Separator } from "@/components/ui/separator";
-import CropList from "@/components/CropRecommendation/CropList";
-import { getRecommendedCrops } from "@/utils/cropRecommendations";
 import { Cloud, CloudRain, Droplets, ThermometerSun } from "lucide-react";
 
 const Index = () => {
   const { data: latestSensorData, isLoading: isLoadingLatest } = useLatestSensorData();
   const { data: historicalData, isLoading: isLoadingHistorical } = useHistoricalData();
-  const [recommendedCrops, setRecommendedCrops] = useState([]);
 
   // Calculate averages from historical data
   const averages = calculateAverages(historicalData);
@@ -21,14 +18,6 @@ const Index = () => {
   const recentHistoricalData = historicalData?.data 
     ? [...historicalData.data].slice(-12) 
     : [];
-
-  // Update crop recommendations when sensor data changes
-  useEffect(() => {
-    if (latestSensorData?.data) {
-      const crops = getRecommendedCrops(latestSensorData.data);
-      setRecommendedCrops(crops);
-    }
-  }, [latestSensorData]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mb-16 sm:mb-0">
@@ -105,18 +94,6 @@ const Index = () => {
               />
             </CardContent>
           </Card>
-        </section>
-
-        {/* Crop Recommendations Section */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Top Crop Recommendations</h2>
-          <p className="text-muted-foreground">
-            Based on current environmental conditions
-          </p>
-          <CropList 
-            crops={recommendedCrops.slice(0, 3)} 
-            isLoading={isLoadingLatest} 
-          />
         </section>
       </div>
     </div>
