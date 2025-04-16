@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SensorStats, WeatherStats } from '@/types/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 interface StatisticsChartsProps {
   sensorStats: SensorStats;
@@ -69,13 +69,20 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
         <CardContent className="h-[300px]">
           <ChartContainer config={tempChartConfig}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={tempData}>
+              <LineChart data={tempData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="value" fill="#22c55e" name="Temperature (°C)" />
-              </BarChart>
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#22c55e" 
+                  name="Temperature (°C)"
+                  dot={{ fill: '#22c55e', r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
@@ -88,13 +95,20 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
         <CardContent className="h-[300px]">
           <ChartContainer config={humiChartConfig}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={humiData}>
+              <LineChart data={humiData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="value" fill="#3b82f6" name="Humidity (%)" />
-              </BarChart>
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#3b82f6" 
+                  name="Humidity (%)"
+                  dot={{ fill: '#3b82f6', r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
@@ -107,13 +121,20 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
         <CardContent className="h-[300px]">
           <ChartContainer config={moistChartConfig}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={moistData}>
+              <LineChart data={moistData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="value" fill="#eab308" name="Moisture (%)" />
-              </BarChart>
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#eab308" 
+                  name="Moisture (%)"
+                  dot={{ fill: '#eab308', r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
