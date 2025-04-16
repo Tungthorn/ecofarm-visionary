@@ -3,7 +3,12 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SensorStats, WeatherStats } from '@/types/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { 
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, 
+  CartesianGrid, ResponsiveContainer, Legend, Tooltip 
+} from 'recharts';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChartBarIcon, TrendingUpIcon } from "lucide-react";
 
 interface StatisticsChartsProps {
   sensorStats: SensorStats;
@@ -11,24 +16,24 @@ interface StatisticsChartsProps {
 }
 
 const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) => {
-  // Prepare data for the temperature histogram
+  // Prepare data for the temperature comparison
   const tempData = [
-    { name: 'Sensor Min', value: sensorStats.min_temp },
-    { name: 'Sensor Avg', value: sensorStats.avg_temp },
-    { name: 'Sensor Max', value: sensorStats.max_temp },
-    { name: 'Weather Min', value: weatherStats.w_min_temp },
-    { name: 'Weather Avg', value: weatherStats.w_avg_temp },
-    { name: 'Weather Max', value: weatherStats.w_max_temp },
+    { name: 'Sensor Min', value: sensorStats.min_temp, category: 'Sensor' },
+    { name: 'Sensor Avg', value: sensorStats.avg_temp, category: 'Sensor' },
+    { name: 'Sensor Max', value: sensorStats.max_temp, category: 'Sensor' },
+    { name: 'Weather Min', value: weatherStats.w_min_temp, category: 'Weather' },
+    { name: 'Weather Avg', value: weatherStats.w_avg_temp, category: 'Weather' },
+    { name: 'Weather Max', value: weatherStats.w_max_temp, category: 'Weather' },
   ];
 
-  // Prepare data for the humidity histogram
+  // Prepare data for the humidity comparison
   const humiData = [
-    { name: 'Sensor Min', value: sensorStats.min_humi },
-    { name: 'Sensor Avg', value: sensorStats.avg_humi },
-    { name: 'Sensor Max', value: sensorStats.max_humi },
-    { name: 'Weather Min', value: weatherStats.w_min_humi },
-    { name: 'Weather Avg', value: weatherStats.w_avg_humi },
-    { name: 'Weather Max', value: weatherStats.w_max_humi },
+    { name: 'Sensor Min', value: sensorStats.min_humi, category: 'Sensor' },
+    { name: 'Sensor Avg', value: sensorStats.avg_humi, category: 'Sensor' },
+    { name: 'Sensor Max', value: sensorStats.max_humi, category: 'Sensor' },
+    { name: 'Weather Min', value: weatherStats.w_min_humi, category: 'Weather' },
+    { name: 'Weather Avg', value: weatherStats.w_avg_humi, category: 'Weather' },
+    { name: 'Weather Max', value: weatherStats.w_max_humi, category: 'Weather' },
   ];
 
   // Prepare data for the moisture histogram
@@ -38,25 +43,25 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
     { name: 'Max', value: sensorStats.max_moist },
   ];
 
-  // Chart configurations
+  // Chart configurations with improved colors
   const tempChartConfig: ChartConfig = {
     temperature: {
       label: "Temperature (°C)",
-      color: "#22c55e"
+      color: "#F97316" // Bright orange for temperature
     }
   };
 
   const humiChartConfig: ChartConfig = {
     humidity: {
       label: "Humidity (%)",
-      color: "#3b82f6"
+      color: "#0EA5E9" // Ocean blue for humidity
     }
   };
 
   const moistChartConfig: ChartConfig = {
     moisture: {
       label: "Moisture (%)",
-      color: "#eab308"
+      color: "#8B5CF6" // Vivid purple for moisture
     }
   };
 
@@ -67,24 +72,59 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
           <CardTitle>Temperature Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartContainer config={tempChartConfig}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={tempData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Line 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="#22c55e" 
-                  name="Temperature (°C)"
-                  dot={{ fill: '#22c55e', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Tabs defaultValue="line">
+            <TabsList className="mb-2">
+              <TabsTrigger value="line" className="flex items-center gap-1">
+                <TrendingUpIcon className="h-4 w-4" />
+                <span>Line</span>
+              </TabsTrigger>
+              <TabsTrigger value="bar" className="flex items-center gap-1">
+                <ChartBarIcon className="h-4 w-4" />
+                <span>Bar</span>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="line">
+              <ChartContainer config={tempChartConfig}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={tempData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="value" 
+                      stroke="#F97316" 
+                      name="Temperature (°C)"
+                      dot={{ fill: '#F97316', r: 4 }}
+                      activeDot={{ r: 6 }}
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </TabsContent>
+            <TabsContent value="bar">
+              <ChartContainer config={tempChartConfig}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={tempData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Bar 
+                      dataKey="value" 
+                      fill="#F97316" 
+                      name="Temperature (°C)" 
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
 
@@ -93,24 +133,59 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
           <CardTitle>Humidity Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartContainer config={humiChartConfig}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={humiData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Line 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="#3b82f6" 
-                  name="Humidity (%)"
-                  dot={{ fill: '#3b82f6', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Tabs defaultValue="line">
+            <TabsList className="mb-2">
+              <TabsTrigger value="line" className="flex items-center gap-1">
+                <TrendingUpIcon className="h-4 w-4" />
+                <span>Line</span>
+              </TabsTrigger>
+              <TabsTrigger value="bar" className="flex items-center gap-1">
+                <ChartBarIcon className="h-4 w-4" />
+                <span>Bar</span>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="line">
+              <ChartContainer config={humiChartConfig}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={humiData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="value" 
+                      stroke="#0EA5E9" 
+                      name="Humidity (%)"
+                      dot={{ fill: '#0EA5E9', r: 4 }}
+                      activeDot={{ r: 6 }}
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </TabsContent>
+            <TabsContent value="bar">
+              <ChartContainer config={humiChartConfig}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={humiData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Bar 
+                      dataKey="value" 
+                      fill="#0EA5E9" 
+                      name="Humidity (%)" 
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
 
@@ -119,24 +194,59 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
           <CardTitle>Soil Moisture Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartContainer config={moistChartConfig}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={moistData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Line 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="#eab308" 
-                  name="Moisture (%)"
-                  dot={{ fill: '#eab308', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Tabs defaultValue="line">
+            <TabsList className="mb-2">
+              <TabsTrigger value="line" className="flex items-center gap-1">
+                <TrendingUpIcon className="h-4 w-4" />
+                <span>Line</span>
+              </TabsTrigger>
+              <TabsTrigger value="bar" className="flex items-center gap-1">
+                <ChartBarIcon className="h-4 w-4" />
+                <span>Bar</span>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="line">
+              <ChartContainer config={moistChartConfig}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={moistData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="value" 
+                      stroke="#8B5CF6" 
+                      name="Moisture (%)"
+                      dot={{ fill: '#8B5CF6', r: 4 }}
+                      activeDot={{ r: 6 }}
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </TabsContent>
+            <TabsContent value="bar">
+              <ChartContainer config={moistChartConfig}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={moistData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Bar 
+                      dataKey="value" 
+                      fill="#8B5CF6" 
+                      name="Moisture (%)" 
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
