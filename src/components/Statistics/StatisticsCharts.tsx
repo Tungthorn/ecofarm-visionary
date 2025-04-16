@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SensorStats, WeatherStats } from '@/types/types';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 interface StatisticsChartsProps {
@@ -38,6 +38,28 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
     { name: 'Max', value: sensorStats.max_moist },
   ];
 
+  // Chart configurations
+  const tempChartConfig: ChartConfig = {
+    temperature: {
+      label: "Temperature (°C)",
+      color: "#22c55e"
+    }
+  };
+
+  const humiChartConfig: ChartConfig = {
+    humidity: {
+      label: "Humidity (%)",
+      color: "#3b82f6"
+    }
+  };
+
+  const moistChartConfig: ChartConfig = {
+    moisture: {
+      label: "Moisture (%)",
+      color: "#eab308"
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
       <Card>
@@ -45,7 +67,7 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
           <CardTitle>Temperature Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartContainer>
+          <ChartContainer config={tempChartConfig}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={tempData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -64,7 +86,7 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
           <CardTitle>Humidity Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartContainer>
+          <ChartContainer config={humiChartConfig}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={humiData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -83,7 +105,7 @@ const StatisticsCharts = ({ sensorStats, weatherStats }: StatisticsChartsProps) 
           <CardTitle>Soil Moisture Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartContainer>
+          <ChartContainer config={moistChartConfig}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={moistData}>
                 <CartesianGrid strokeDasharray="3 3" />
