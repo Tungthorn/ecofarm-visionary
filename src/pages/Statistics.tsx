@@ -1,7 +1,7 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSensorStats, useWeatherStats } from "@/hooks/useStats";
 import { Thermometer, Droplet, Wind, Gauge } from "lucide-react";
+import StatisticsCharts from "@/components/Statistics/StatisticsCharts";
 
 const Statistics = () => {
   const { data: sensorStats, isLoading: sensorLoading } = useSensorStats();
@@ -158,6 +158,14 @@ const Statistics = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Add Statistics Charts */}
+        {!sensorLoading && !weatherLoading && sensorStats && weatherStats && (
+          <StatisticsCharts 
+            sensorStats={sensorStats.data} 
+            weatherStats={weatherStats.data} 
+          />
+        )}
       </div>
     </div>
   );
