@@ -17,6 +17,7 @@ const Navbar = () => {
     { path: "/historical", label: "Historical Data", icon: <BarChart2 className="h-4 w-4" /> },
     { path: "/location", label: "Location Weather", icon: <Compass className="h-4 w-4" /> },
     { path: "/predictions", label: "Predictions", icon: <Wand2 className="h-4 w-4" /> },
+    { path: "/statistics", label: "Statistics", icon: <BarChart2 className="h-4 w-4" /> },
   ];
 
   return (
